@@ -1,0 +1,26 @@
+app:
+  build: .
+  links:
+    - db
+    - php-redis
+  ports:
+    - "8084:80"
+  volumes:
+    - ./wordpress/wp-content:/var/www/html/wp-content
+  environment:
+    WORDPRESS_DB_HOST: db
+    WORDPRESS_DB_NAME: cms
+    WORDPRESS_DB_USER: cms
+    WORDPRESS_DB_PASSWORD: cms
+    WORDPRESS_WP_HOST: http://localhost:9000
+ 
+db:
+  image: mysql:5.7
+  environment:
+    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    MYSQL_DATABASE: cms
+    MYSQL_USER: cms
+    MYSQL_PASSWORD: cms
+ 
+php-redis:
+  image: redis:3.2

@@ -1,2 +1,1 @@
-# my-docker-wordpress
-my wordpress docker repository
+# my docker image of wordpress
