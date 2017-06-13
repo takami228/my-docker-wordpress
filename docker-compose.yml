@@ -4,7 +4,7 @@ app:
     - db
     - php-redis
   ports:
-    - "8084:80"
+    - "9000:80"
   volumes:
     - ./wordpress/wp-content:/var/www/html/wp-content
   environment:
