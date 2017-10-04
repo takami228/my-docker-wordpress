@@ -38,7 +38,7 @@ RUN { \
 RUN a2enmod rewrite expires
 
 # Install phpredis
-RUN curl -L -o /usr/local/src/phpredis.tar.gz https://github.com/phpredis/phpredis/archive/php7.tar.gz \
+RUN curl -L -o /usr/local/src/phpredis.tar.gz https://github.com/phpredis/phpredis/archive/3.1.4.tar.gz \
   && cd /usr/local/src \
   && tar xfz /usr/local/src/phpredis.tar.gz \
   && rm -r /usr/local/src/phpredis.tar.gz \
