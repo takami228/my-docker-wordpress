@@ -12,7 +12,9 @@ RUN set -ex; \
     libpng12-dev \
     git \
     zip \
-    unzip\
+    unzip \
+    wget \
+    vim \
   ; \
   rm -rf /var/lib/apt/lists/*; \
   \
@@ -69,6 +71,20 @@ RUN set -ex; \
 #  rm -f /var/www/html/wp-admin/upgrade.php; \
 #  rm -f /var/www/html/wp-includes/wlwmanifest.xml; \
   mkdir /var/www/conf
+
+# Install Java
+RUN wget -q --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.tar.gz; \
+  mkdir /opt/jdk; \
+  tar -zxf jdk-8u152-linux-x64.tar.gz -C /opt/jdk; \
+  update-alternatives --install /usr/bin/java java /opt/jdk/jdk1.8.0_152/bin/java 100; \
+  update-alternatives --install /usr/bin/javac javac /opt/jdk/jdk1.8.0_152/bin/javac 100
+
+# Install Logstash
+RUN wget -q https://artifacts.elastic.co/downloads/logstash/logstash-5.6.3.tar.gz; \
+  mv logstash-5.6.3.tar.gz /usr/local; \
+  tar -zxf /usr/local/logstash-5.6.3.tar.gz; \
+  mv /usr/local/logstash-5.6.3 /usr/local/logstash; \
+  mkdir /opt/logstash
 
 # Apply php.ini
 COPY conf/php.ini /usr/local/etc/php/php.ini
