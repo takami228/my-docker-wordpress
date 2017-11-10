@@ -1,26 +1,36 @@
-app:
-  build: .
-  links:
-    - db
-    - php-redis
-  ports:
-    - "9000:80"
-  volumes:
-    - ./wordpress/wp-content:/var/www/html/wp-content
-  environment:
-    WORDPRESS_DB_HOST: db
-    WORDPRESS_DB_NAME: cms
-    WORDPRESS_DB_USER: cms
-    WORDPRESS_DB_PASSWORD: cms
-    WORDPRESS_WP_HOST: http://localhost:9000
- 
-db:
-  image: mysql:5.7
-  environment:
-    MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    MYSQL_DATABASE: cms
-    MYSQL_USER: cms
-    MYSQL_PASSWORD: cms
- 
-php-redis:
-  image: redis:3.2
+version: '3'
+services:
+  app:
+    build: web
+    ports:
+      - "9000:80"
+    volumes:
+      - ./wordpress/wp-content:/var/www/html/wp-content
+    networks: ['stack']
+  
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: cms
+      MYSQL_USER: cms
+      MYSQL_PASSWORD: cms
+    networks: ['stack']
+
+  php-redis:
+    image: redis:3.2
+    networks: ['stack']
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.4
+    environment: ['http.host=0.0.0.0', 'transport.host=127.0.0.1']
+    ports: ['127.0.0.1:9200:9200']
+    networks: ['stack']
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.6.4
+    ports: ['127.0.0.1:5601:5601']
+    networks: ['stack']
+    depends_on: ['elasticsearch']
+
+networks: {stack: {}}
